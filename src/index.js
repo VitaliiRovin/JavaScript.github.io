@@ -23,7 +23,7 @@ function map(array, fn) {
 
     for (let i = 0; i < array.length; i++) {
         let item = fn(array[i], i, array);
-        
+
         newArr.push(item);
     }
 
@@ -37,17 +37,11 @@ function map(array, fn) {
     Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
  */
 function reduce(array, fn, initial) {
-    let prev = initial || array[0],
-        i = 0;
+    let prev = initial ? initial : array[0];
+    const firstIter = initial ? 0 : 1;
 
-    if (i = initial) {
-        i = 0;
-    } else {
-        i = 1;
-    }
-
-    for (; i < array.length; i++) {
-        prev = fn(prev, array[i], i, array)
+    for (let i = firstIter; i < array.length; i++) {
+        prev = fn(prev, array[i], i, array);
     }
 
     return prev;
@@ -78,12 +72,24 @@ function upperProps(obj) {
     Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
 function slice(array, from, to) {
-    let newArr = [];
+    const newArr = [];
+    let begin = from;
+    let end = to;
 
-    for (let i = 0; i < array.length; i++) {
-        if (i > from && i < to) {
-            newArr.push(array[i]);
-        }
+    if (from === undefined || -from > array.length) {
+        begin = 0;
+    } else if (from < 0) {
+        begin = array.length + from;
+    }
+
+    if (to === undefined || to > array.length) {
+        end = array.length;
+    } else if (to < 0) {
+        end = array.length + to;
+    }
+
+    for (let i = begin; i < end; i++) {
+        newArr.push(array[i]);
     }
 
     return newArr;
@@ -96,6 +102,11 @@ function slice(array, from, to) {
     Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+    return new Proxy(obj, {
+        set(target, name, val) {
+            return target[name] = val ** 2;
+        }
+    })
 }
 
 export {
