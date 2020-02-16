@@ -13,7 +13,9 @@
 function createDivWithText(text) {
     let div = document.createElement('div');
 
-    return div.innerText = text;
+    div.innerText = text;
+
+    return div;
 }
 
 /*
@@ -49,13 +51,10 @@ function prepend(what, where) {
  */
 function findAllPSiblings(where) {
     let arr = [];
-    let arrChilds = where.children;
+    let arrChild = where.querySelectorAll('p');
 
-    for (let node of arrChilds) {
-        if (node.tagName === 'P') {
-            arr.push(node.previousElementSibling);
-            arr.push(node.nextElementSibling);
-        }
+    for (let node of arrChild) {
+        arr.push(node.previousElementSibling);
     }
 
     return arr;
@@ -79,7 +78,7 @@ function findAllPSiblings(where) {
    findError(document.body) // функция должна вернуть массив с элементами 'привет' и 'loftschool'
  */
 function findError(where) {
-    var result = [];
+    let result = [];
 
     for (let child of where.children) {
         result.push(child.innerText);
@@ -103,7 +102,7 @@ function findError(where) {
 function deleteTextNodes(where) {
     for (let child of where.childNodes) {
         if (child.nodeType === 3) {
-            where.removeChilde(child);
+            where.removeChild(child);
         }
     }
 }
@@ -120,6 +119,17 @@ function deleteTextNodes(where) {
     должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 function deleteTextNodesRecursive(where) {
+    let nodes = [...where.childNodes];
+
+    for (let child of nodes) {
+        if (child.nodeType === 3) {
+            where.removeChild(child);
+        }
+
+        if (child.childNodes.length > 0) {
+            deleteTextNodesRecursive(child);
+        }
+    }
 }
 
 /*
