@@ -23,7 +23,7 @@ function addListener(eventName, target, fn) {
    указанный элемент
  */
 function removeListener(eventName, target, fn) {
-    target.addEventListener(eventName, fn)
+    target.removeEventListener(eventName, fn)
 }
 
 /*
@@ -52,7 +52,7 @@ function skipDefault(eventName, target) {
 function emulateClick(target) {
     const event = new CustomEvent ('click');
 
-    target.addEventListener(event)
+    target.dispatchEvent(event)
 }
 
 /*
@@ -67,7 +67,7 @@ function emulateClick(target) {
  */
 function delegate(target, fn) {
     target.addEventListener('click', (e) => {
-        if (e.target.tagName === 'Button') {
+        if (e.target.tagName === 'BUTTON') {
             fn();
         }
     })
